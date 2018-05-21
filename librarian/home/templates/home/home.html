@@ -1,0 +1,67 @@
+{% extends 'home/base.html' %}
+{% block title %}Home{% endblock %}
+{ % block home_active % }  active  { % endblock % }
+{% block body %}
+<div class="jumbotron">
+    <h1 align="center">Home Page</h1>
+    <p align="center">OLMS is Online Library Management Service where we can issue return and renewal our books.</p>
+  </div>
+{%if issue_success%}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Successfully</strong> issued {{book_name}} book to {{student_name}} !!!!
+    </div>
+{%endif%}
+{%if renewal_success%}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Successfully</strong> renewed {{book_name}} book of {{student_name}} !!!!
+    </div>
+{%endif%}
+{%if return_success%}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>Successfully</strong> returned {{book_name}} book by {{student_name}} !!!!
+    </div>
+{%endif%}
+{%if login_success%}
+    <div class="alert alert-success alert-dismissable">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{login_success}}</strong>
+    </div>
+{%endif%}
+<div class="jumbotron">
+    Search books taken by a Student:<br>
+    <form method="post" action="{% url 'home:getbooks' %}">
+            {% csrf_token %}
+  <div class="form-group form-inline">
+    <label for="student_id">Student id:</label>&nbsp;
+    <input type="text" class="form-control" id="student_id" name="student_id">&nbsp;
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+</div>
+{%if books%}
+    {%if number%}
+    You Have {{number}} books...
+    {%endif%}
+    <table class="table table-stripped table-bordered">
+        <thead>
+        <tr>
+            <td>S.no</td>
+            <td>Book id</td>
+            <td>Book name</td>
+        </tr>
+        </thead>
+        {%for book in books%}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{book.book_id}}</td>
+                <td>{{book.book_name}}</td>
+            </tr>
+        {%endfor%}
+    </table>
+{%else%}
+    <p class="danger">You have no books....</p>
+{%endif%}
+{%endblock%}
